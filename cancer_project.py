@@ -21,9 +21,7 @@ import matplotlib.pyplot as plt
 #file upload and connect
 df_cancer = pd.read_csv(/content/Cancer_Data.csv)
 
-
-#display top table top raws
-df_cancer.head()
+print(df_cancer.head())
 
 df_cancer.info() #data type each each data colomns
 
