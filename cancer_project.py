@@ -174,9 +174,3 @@ print("\nClassification Report:\n", class_report)
 
 
 
-import pickle
-from sklearn.linear_model import LogisticRegression
-
-# Save the model to a file
-filename = 'logistic_regression_model.pkl'
-pickle.dump(LogisticRegression(), open(filename, 'wb'))
