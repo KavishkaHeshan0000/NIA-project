@@ -21,7 +21,7 @@ import matplotlib.pyplot as plt
 #file upload and connect
 file_path = '/content/Cancer_Data.csv'
 df_cancer = pd.read_csv(Cancer_Data.csv)
-df_cancer = pd.read_csv('/path/to/your/Cancer_Data.csv')
+
 
 #display top table top raws
 df_cancer.head()
