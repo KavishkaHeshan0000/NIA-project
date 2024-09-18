@@ -19,7 +19,7 @@ from sklearn.metrics import accuracy_score
 import matplotlib.pyplot as plt
 
 #file upload and connect
-df_cancer = pd.read_csv(/content/Cancer_Data.csv)
+df_cancer = pd.read_csv("/content/Cancer_Data.csv")
 
 print(df_cancer.head())
 
