@@ -17,7 +17,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 
 #file upload and connect
-data = pd.read_csv('/content/Cancer_Data.csv')
+data = pd.read_csv('Cancer_Data.csv')
 
 # Inspect the first few rows
 print(data.head())
