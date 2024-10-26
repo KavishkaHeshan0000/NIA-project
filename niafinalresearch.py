@@ -199,4 +199,4 @@ import joblib
 joblib.dump(best_model, 'cancer_prediction_model.pkl')
 
 # To load the model in future
-loaded_model = joblib.load('/content/cancer_prediction_model.pkl')
+loaded_model = joblib.load('cancer_prediction_model.pkl')
