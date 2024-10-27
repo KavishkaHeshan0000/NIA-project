@@ -2,8 +2,6 @@ import streamlit as st
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
 
 # Load the dataset
 file_name = 'Cancer_Data.csv'  # Make sure to upload the file using the Streamlit interface
@@ -12,13 +10,6 @@ data = pd.read_csv(file_name)
 # Data preprocessing
 data = data.drop(columns=['id', 'Unnamed: 32'], errors='ignore')
 data['diagnosis'] = data['diagnosis'].map({'M': 1, 'B': 0})
-
-# Split the data into features and target
-X = data.drop('diagnosis', axis=1)
-y = data['diagnosis']
-
-# Train-test split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Streamlit app title
 st.title('Breast Cancer Data Visualization')
@@ -31,16 +22,14 @@ visualization_type = st.sidebar.selectbox('Choose the type of visualization',
                                            'Pair Plot', 
                                            'Box Plot', 
                                            'Distribution Plot', 
-                                           'Density Plot',
                                            'Violin Plot', 
-                                           'Scatter Plot', 
-                                           'Feature Importance'])
+                                           'Scatter Plot'])
 
 # Visualization: Distribution of Diagnosis
 if visualization_type == 'Distribution of Diagnosis':
     st.subheader('Distribution of Diagnosis')
     plt.figure(figsize=(10, 6))
-    sns.countplot(x='diagnosis', data=data, palette=['#FF6347', '#4682B4'])
+    sns.countplot(x='diagnosis', data=data, hue='diagnosis', palette=['#FF6347', '#4682B4'], legend=False)
     plt.title('Distribution of Diagnosis')
     plt.xlabel('Diagnosis (0 = Benign, 1 = Malignant)')
     plt.ylabel('Count')
@@ -63,46 +52,27 @@ elif visualization_type == 'Pair Plot':
 # Visualization: Box Plot
 elif visualization_type == 'Box Plot':
     st.subheader('Box Plot of Selected Features by Diagnosis')
-    
-    # Select a feature for the box plot
-    selected_feature = st.selectbox("Select a feature to plot", 
-                                     ['radius_mean', 'texture_mean', 'perimeter_mean', 'area_mean', 'smoothness_mean'])
-    
-    plt.figure(figsize=(10, 6))
-    sns.boxplot(x='diagnosis', y=selected_feature, data=data, palette=['#FF6347', '#4682B4'])
-    plt.title(f'Box Plot of {selected_feature} by Diagnosis')
-    plt.xlabel('Diagnosis (0 = Benign, 1 = Malignant)')
-    plt.ylabel(selected_feature)
+    selected_features = ['radius_mean', 'texture_mean', 'perimeter_mean', 'area_mean', 'smoothness_mean']
+    data_melted = pd.melt(data, id_vars='diagnosis', value_vars=selected_features)
+    plt.figure(figsize=(15, 8))
+    sns.boxplot(x='variable', y='value', hue='diagnosis', data=data_melted, palette=['#FF6347', '#4682B4'])
+    plt.title('Box Plot of Selected Features by Diagnosis')
+    plt.xlabel('Features')
+    plt.ylabel('Value')
     st.pyplot(plt)
 
 # Visualization: Distribution Plot
 elif visualization_type == 'Distribution Plot':
-    st.subheader('Distribution of Selected Feature')
-    
-    # Select a feature for the distribution plot
-    selected_feature = st.selectbox("Select a feature to plot", 
-                                     ['radius_mean', 'texture_mean', 'perimeter_mean', 'area_mean', 'smoothness_mean'])
-    
-    plt.figure(figsize=(10, 6))
-    sns.histplot(data=data, x=selected_feature, hue='diagnosis', element='step', stat='density', common_norm=False, palette=['#FF6347', '#4682B4'])
-    plt.title(f'Distribution of {selected_feature}')
-    plt.xlabel(selected_feature)
-    plt.ylabel('Density')
-    st.pyplot(plt)
-
-# Visualization: Density Plot
-elif visualization_type == 'Density Plot':
-    st.subheader('Density Plot of Selected Feature')
-    
-    # Select a feature for the density plot
-    selected_feature = st.selectbox("Select a feature to plot", 
-                                     ['radius_mean', 'texture_mean', 'perimeter_mean', 'area_mean', 'smoothness_mean'])
-    
-    plt.figure(figsize=(10, 6))
-    sns.kdeplot(data=data, x=selected_feature, hue='diagnosis', fill=True, common_norm=False, palette=['#FF6347', '#4682B4'])
-    plt.title(f'Density Plot of {selected_feature}')
-    plt.xlabel(selected_feature)
-    plt.ylabel('Density')
+    st.subheader('Distribution of Features')
+    selected_features = ['radius_mean', 'texture_mean', 'perimeter_mean', 'area_mean', 'smoothness_mean']
+    plt.figure(figsize=(12, 8))
+    for i, feature in enumerate(selected_features):
+        plt.subplot(2, 3, i + 1)
+        sns.histplot(data=data, x=feature, hue='diagnosis', element='step', stat='density', common_norm=False, palette=['#FF6347', '#4682B4'])
+        plt.title(f'Distribution of {feature}')
+        plt.xlabel(feature)
+        plt.ylabel('Density')
+    plt.tight_layout()
     st.pyplot(plt)
 
 # Visualization: Violin Plot
@@ -124,31 +94,6 @@ elif visualization_type == 'Scatter Plot':
     plt.xlabel('Radius Mean')
     plt.ylabel('Texture Mean')
     plt.legend(title='Diagnosis', loc='upper right')
-    st.pyplot(plt)
-
-# Visualization: Feature Importance
-elif visualization_type == 'Feature Importance':
-    # Train the Random Forest model
-    rf_model = RandomForestClassifier(random_state=42)
-    rf_model.fit(X_train, y_train)
-
-    # Get feature importance
-    importance = rf_model.feature_importances_
-
-    # Create a DataFrame for visualization
-    feature_names = X_train.columns
-    feature_importance_df = pd.DataFrame({
-        'Feature': feature_names,
-        'Importance': importance
-    }).sort_values(by='Importance', ascending=False)
-
-    # Visualization
-    st.subheader('Feature Importance from Random Forest Model')
-    plt.figure(figsize=(10, 6))
-    sns.barplot(x='Importance', y='Feature', data=feature_importance_df, palette='viridis')
-    plt.title('Feature Importance')
-    plt.xlabel('Importance Score')
-    plt.ylabel('Feature')
     st.pyplot(plt)
 
 # Display the visualization
