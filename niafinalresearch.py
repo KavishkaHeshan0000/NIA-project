@@ -83,16 +83,17 @@ elif visualization_type == 'Box Plot':
 
 # Visualization: Distribution Plot
 elif visualization_type == 'Distribution Plot':
-    st.subheader('Distribution of Features')
-    selected_features = ['radius_mean', 'texture_mean', 'perimeter_mean', 'area_mean', 'smoothness_mean']
-    plt.figure(figsize=(12, 8))
-    for i, feature in enumerate(selected_features):
-        plt.subplot(2, 3, i + 1)
-        sns.histplot(data=data, x=feature, hue='diagnosis', element='step', stat='density', common_norm=False, palette=['#FF6347', '#4682B4'])
-        plt.title(f'Distribution of {feature}')
-        plt.xlabel(feature)
-        plt.ylabel('Density')
-    plt.tight_layout()
+    st.subheader('Distribution of Selected Feature')
+    
+    # Select a feature for the distribution plot
+    selected_feature = st.selectbox("Select a feature to plot", 
+                                     ['radius_mean', 'texture_mean', 'perimeter_mean', 'area_mean', 'smoothness_mean'])
+    
+    plt.figure(figsize=(10, 6))
+    sns.histplot(data=data, x=selected_feature, hue='diagnosis', element='step', stat='density', common_norm=False, palette=['#FF6347', '#4682B4'])
+    plt.title(f'Distribution of {selected_feature}')
+    plt.xlabel(selected_feature)
+    plt.ylabel('Density')
     st.pyplot(plt)
 
 # Visualization: Violin Plot
