@@ -31,6 +31,7 @@ visualization_type = st.sidebar.selectbox('Choose the type of visualization',
                                            'Pair Plot', 
                                            'Box Plot', 
                                            'Distribution Plot', 
+                                           'Density Plot',
                                            'Violin Plot', 
                                            'Scatter Plot', 
                                            'Feature Importance'])
@@ -85,6 +86,21 @@ elif visualization_type == 'Distribution Plot':
     plt.figure(figsize=(10, 6))
     sns.histplot(data=data, x=selected_feature, hue='diagnosis', element='step', stat='density', common_norm=False, palette=['#FF6347', '#4682B4'])
     plt.title(f'Distribution of {selected_feature}')
+    plt.xlabel(selected_feature)
+    plt.ylabel('Density')
+    st.pyplot(plt)
+
+# Visualization: Density Plot
+elif visualization_type == 'Density Plot':
+    st.subheader('Density Plot of Selected Feature')
+    
+    # Select a feature for the density plot
+    selected_feature = st.selectbox("Select a feature to plot", 
+                                     ['radius_mean', 'texture_mean', 'perimeter_mean', 'area_mean', 'smoothness_mean'])
+    
+    plt.figure(figsize=(10, 6))
+    sns.kdeplot(data=data, x=selected_feature, hue='diagnosis', fill=True, common_norm=False, palette=['#FF6347', '#4682B4'])
+    plt.title(f'Density Plot of {selected_feature}')
     plt.xlabel(selected_feature)
     plt.ylabel('Density')
     st.pyplot(plt)
