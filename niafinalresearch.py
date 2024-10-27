@@ -54,12 +54,6 @@ elif visualization_type == 'Correlation Matrix':
     plt.title('Correlation Matrix')
     st.pyplot(plt)
 
-# Visualization: Pair Plot
-elif visualization_type == 'Pair Plot':
-    st.subheader('Pair Plot of Features')
-    sns.pairplot(data, hue='diagnosis', diag_kind='kde', markers=["o", "s"], palette=['#FF6347', '#4682B4'])
-    st.pyplot(plt)
-
 # Visualization: Box Plot
 elif visualization_type == 'Box Plot':
     st.subheader('Box Plot of Selected Features by Diagnosis')
