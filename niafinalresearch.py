@@ -40,7 +40,7 @@ visualization_type = st.sidebar.selectbox('Choose the type of visualization',
 if visualization_type == 'Distribution of Diagnosis':
     st.subheader('Distribution of Diagnosis')
     plt.figure(figsize=(10, 6))
-    sns.countplot(x='diagnosis', data=data, palette=['#FF6347', '#4682B4'])
+    sns.countplot(x='diagnosis', data=data, hue='diagnosis', palette=['#FF6347', '#4682B4'], legend=False)
     plt.title('Distribution of Diagnosis')
     plt.xlabel('Diagnosis (0 = Benign, 1 = Malignant)')
     plt.ylabel('Count')
