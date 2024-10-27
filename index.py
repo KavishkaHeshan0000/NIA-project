@@ -6,7 +6,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 
 # Load the dataset
-file_name = 'Cancer_Data.csv'  # Make sure to upload the file using the Streamlit interface
+file_name = 'Cancer_Data.csv' 
 data = pd.read_csv(file_name)
 
 # Data preprocessing
