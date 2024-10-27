@@ -8,21 +8,21 @@ Original file is located at
 
 **Data Loading and Inspection**
 """
-import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-
-uploaded_file = st.file_uploader("Cancer_Data.csv", type="csv")
-if uploaded_file:
-    data = pd.read_csv(uploaded_file)
     
-    # Display data head
-    st.write("Data preview:", data.head())
+#file upload and connect
+data = pd.read_csv('Cancer_Data.csv')
+# Inspect the first few rows
+print(data.head())
+# Get information about data types and missing values
 
+print(data.info())
+"""**Data Cleaning**"""
 
 # Drop unnecessary columns
 data_cleaned = data.drop(columns=['id', 'Unnamed: 32'], errors='ignore')
