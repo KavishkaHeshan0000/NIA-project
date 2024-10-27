@@ -46,19 +46,39 @@ elif visualization_type == 'Correlation Matrix':
 # Visualization: Pair Plot
 elif visualization_type == 'Pair Plot':
     st.subheader('Pair Plot of Features')
-    sns.pairplot(data, hue='diagnosis', diag_kind='kde', markers=["o", "s"], palette=['#FF6347', '#4682B4'])
+    
+    # Select features for pair plot
+    features = ['radius_mean', 'texture_mean', 'perimeter_mean', 'area_mean', 'smoothness_mean']
+    selected_feature_x = st.selectbox("Select feature for X-axis", features)
+    selected_feature_y = st.selectbox("Select feature for Y-axis", features)
+
+    # Ensure that X and Y features are not the same
+    while selected_feature_x == selected_feature_y:
+        st.warning("Please select different features for X and Y axes.")
+        selected_feature_y = st.selectbox("Select feature for Y-axis", features)
+    
+    # Create the scatter plot for selected features
+    plt.figure(figsize=(10, 6))
+    sns.scatterplot(x=data[selected_feature_x], y=data[selected_feature_y], hue=data['diagnosis'], palette=['#FF6347', '#4682B4'], s=100, alpha=0.6, edgecolor='w')
+    plt.title(f'Scatter Plot of {selected_feature_x} vs. {selected_feature_y}')
+    plt.xlabel(selected_feature_x)
+    plt.ylabel(selected_feature_y)
+    plt.legend(title='Diagnosis', loc='upper right')
     st.pyplot(plt)
 
 # Visualization: Box Plot
 elif visualization_type == 'Box Plot':
     st.subheader('Box Plot of Selected Features by Diagnosis')
-    selected_features = ['radius_mean', 'texture_mean', 'perimeter_mean', 'area_mean', 'smoothness_mean']
-    data_melted = pd.melt(data, id_vars='diagnosis', value_vars=selected_features)
-    plt.figure(figsize=(15, 8))
-    sns.boxplot(x='variable', y='value', hue='diagnosis', data=data_melted, palette=['#FF6347', '#4682B4'])
-    plt.title('Box Plot of Selected Features by Diagnosis')
-    plt.xlabel('Features')
-    plt.ylabel('Value')
+    
+    # Select a feature for the box plot
+    selected_feature = st.selectbox("Select a feature to plot", 
+                                     ['radius_mean', 'texture_mean', 'perimeter_mean', 'area_mean', 'smoothness_mean'])
+    
+    plt.figure(figsize=(10, 6))
+    sns.boxplot(x='diagnosis', y=selected_feature, data=data, palette=['#FF6347', '#4682B4'])
+    plt.title(f'Box Plot of {selected_feature} by Diagnosis')
+    plt.xlabel('Diagnosis (0 = Benign, 1 = Malignant)')
+    plt.ylabel(selected_feature)
     st.pyplot(plt)
 
 # Visualization: Distribution Plot
